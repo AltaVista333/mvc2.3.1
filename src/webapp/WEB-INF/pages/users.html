@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+          rel="stylesheet">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="container">
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+           style="text-align:center; margin-top: 20px; overflow-x: auto;">
+        <thead>
+        <tr>
+            <th style="text-align:center;">id</th>
+            <th style="text-align:center;">name</th>
+            <th style="text-align:center;">surname</th>
+            <th style="text-align:center;">age</th>
+            <th style="text-align:center;">delete</th>
+
+        </tr>
+        </thead>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getId()}">brand</td>
+            <td th:text="${user.getName()}">brand</td>
+            <td th:text="${user.getSurname()}">color</td>
+            <td th:text="${user.getAge()}">color</td>
+            <td>
+                <a th:href="@{/delete?userId={id}(id=${user.getId()})}">
+                    <input type="submit" value="delete"></a>
+            </td>
+        </tr>
+
+
+    </table>
+    <form action="#" method="POST" th:action="@{/users}"
+          th:object="${userDto}">
+        <table>
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>surname</th>
+                <th>age</th>
+                <th>delete</th>
+            </tr>
+            </thead>
+            <tr>
+                <th>
+                    <label>
+                        <input style="width: 100%;" th:field="*{id}" type="text"/>
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        <input style="width: 100%;" th:field="*{name}" type="text"/>
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        <input style="width: 100%;" th:field="*{surname}" type="text"/>
+                    </label>
+                </th>
+                <th>
+                    <label>
+                        <input style="width: 100%;" th:field="*{age}" type="text"/>
+                    </label>
+                </th>
+                <th style="text-align: center">
+                    <a>
+                        <input type="submit" value="submit"/>
+                    </a>
+                </th>
+            </tr>
+        </table>
+        <div th:if="${#fields.hasAnyErrors()}">
+            <ul>
+                <li style="color: red" th:each="err : ${#fields.allErrors()}"  th:text="${err}"/>
+            </ul>
+        </div>
+    </form>
+
+
+
+
+</div>
+
+</body>
+</html>
