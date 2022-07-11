@@ -1,7 +1,6 @@
 package web.controller;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -36,9 +35,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public String addUser(@Valid @ModelAttribute(value = "userDto") UserDto userDto,
-                          BindingResult bindingResult,
-                          RedirectAttributes redirectAttributes) {
+    public String addOrUpdateUser(@Valid @ModelAttribute(value = "userDto") UserDto userDto,
+                                  BindingResult bindingResult,
+                                  RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
            redirectAttributes
                    .addFlashAttribute("org.springframework.validation.BindingResult.userDto"
