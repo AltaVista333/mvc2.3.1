@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import web.dao.UserDao;
 import web.model.User;
-import web.model.UserDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,8 +39,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserById(UserDto dto) {
-        userDao.updateUserById(dto);
+    public void updateUserById(User user) {
+        userDao.updateUserById(user);
     }
 
 

@@ -1,15 +1,13 @@
+/* (C)2022 */
 package web.dao;
 
+import java.util.List;
+import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import web.model.User;
-import web.model.UserDto;
-import web.util.UserDtoConverter;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -17,11 +15,10 @@ public class UserDaoImpl implements UserDao {
     @PersistenceContext
     EntityManager em;
 
-
     @Override
     public List<User> getAllUsers() {
         return em.createQuery("Select u from User u", User.class)
-                .getResultList();
+            .getResultList();
     }
 
     @Override
@@ -44,8 +41,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     @Transactional
-    public void updateUserById(UserDto dto) {
-        Optional.ofNullable(em.find(User.class, dto.getId()))
-                .ifPresent(user -> UserDtoConverter.merge(user, dto));
+    public void updateUserById(User user) {
+        Optional.ofNullable(em.find(User.class, user.getId()))
+            .ifPresent(x -> em.merge(x));
     }
 }

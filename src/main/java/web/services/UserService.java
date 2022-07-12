@@ -1,16 +1,18 @@
+/* (C)2022 */
 package web.services;
-
-import web.model.User;
-import web.model.UserDto;
 
 import java.util.List;
 import java.util.Optional;
+import web.model.User;
 
 public interface UserService {
-    void addUser(User user);
-    List<User> getAllUsers();
-    void deleteUserById(Long id);
-    Optional<User> getUserById(Long id);
-    void updateUserById(UserDto dto);
+  void addUser(User user);
 
+  List<User> getAllUsers();
+
+  void deleteUserById(Long id);
+
+  Optional<User> getUserById(Long id);
+
+  void updateUserById(User user);
 }

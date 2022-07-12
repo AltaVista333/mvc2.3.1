@@ -1,7 +1,12 @@
 package web.config;
 
+import java.util.Objects;
+import java.util.Properties;
+import javax.sql.DataSource;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -11,10 +16,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.sql.DataSource;
-import java.util.Objects;
-import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
@@ -34,7 +35,7 @@ public class PersistenceConfig {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em
-                = new LocalContainerEntityManagerFactoryBean();
+            = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(getDataSource());
         em.setPackagesToScan("web.model");
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -46,7 +47,8 @@ public class PersistenceConfig {
     @Bean
     public DataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Objects.requireNonNull(enviroment().getProperty("db.driver")));
+        dataSource.setDriverClassName(Objects.requireNonNull(enviroment().getProperty(
+            "db.driver")));
         dataSource.setUrl(enviroment().getProperty("db.url"));
         dataSource.setUsername(enviroment().getProperty("db.username"));
         dataSource.setPassword(enviroment().getProperty("db.password"));
@@ -56,9 +58,12 @@ public class PersistenceConfig {
     @Bean
     Properties additionalProperties() {
         Properties props = new Properties();
-        props.put("hibernate.show_sql", enviroment().getProperty("hibernate.show_sql"));
-        props.put("hibernate.hbm2ddl.auto", enviroment().getProperty("hibernate.hbm2ddl.auto"));
-        props.put("hibernate.format_sql", enviroment().getProperty("hibernate.format_sql"));
+        props.put("hibernate.show_sql",
+            enviroment().getProperty("hibernate.show_sql"));
+        props.put("hibernate.hbm2ddl.auto",
+            enviroment().getProperty("hibernate.hbm2ddl.auto"));
+        props.put("hibernate.format_sql",
+            enviroment().getProperty("hibernate.format_sql"));
         return props;
     }
 
@@ -71,7 +76,7 @@ public class PersistenceConfig {
     }
 
     @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
