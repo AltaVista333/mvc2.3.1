@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:if="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
@@ -23,7 +24,7 @@
 
     </tr>
     </thead>
-    <tr th:each="user : ${users}">
+    <tr th:each="user : ${allUsersTable}">
       <td th:text="${user.getId()}">brand</td>
       <td th:text="${user.getName()}">brand</td>
       <td th:text="${user.getSurname()}">color</td>
@@ -36,7 +37,7 @@
 
 
   </table>
-  <form action="#" method="POST" name="user" th:action="@{/users}">
+  <form action="#" method="POST" name="user" th:action="@{/add}">
 
     <table>
       <thead>
@@ -78,8 +79,9 @@
     </table>
 
   </form>
-  <ul>
-    <li th:each="err : ${#fields.errors('user')}" th:text="${err}"/>
+  <ul th:if="${errors}" th:each="err : ${errors}">
+    <li th:text="${err}"/>
+
   </ul>
 
 </div>
