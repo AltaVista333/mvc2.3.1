@@ -15,4 +15,6 @@ public interface UserService {
     Optional<User> getUserById(Long id);
 
     void updateUserById(User user);
+
+    void updateOrsaveUser(User user);
 }
