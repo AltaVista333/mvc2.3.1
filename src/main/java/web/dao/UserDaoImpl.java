@@ -1,4 +1,3 @@
-/* (C)2022 */
 package web.dao;
 
 import java.util.List;
@@ -30,8 +29,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     @Transactional
     public void deleteUser(Long id) {
-        User user = em.find(User.class, id);
-        em.remove(user);
+        Optional.ofNullable(em.find(User.class, id)).ifPresent(em::remove);
     }
 
     @Override
@@ -41,8 +39,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     @Transactional
-    public void updateUserById(User user) {
+    public void updateUser(User user) {
         Optional.ofNullable(em.find(User.class, user.getId()))
-            .ifPresent(x -> em.merge(x));
+            .ifPresent(usr -> em.merge(user));
     }
 }

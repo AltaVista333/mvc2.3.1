@@ -1,4 +1,3 @@
-/* (C)2022 */
 package web.services;
 
 import java.util.List;
@@ -6,13 +5,14 @@ import java.util.Optional;
 import web.model.User;
 
 public interface UserService {
-  void addUser(User user);
 
-  List<User> getAllUsers();
+    void addUser(User user);
 
-  void deleteUserById(Long id);
+    List<User> getAllUsers();
 
-  Optional<User> getUserById(Long id);
+    void deleteUserById(Long id);
 
-  void updateUserById(User user);
+    Optional<User> getUserById(Long id);
+
+    void updateUserById(User user);
 }

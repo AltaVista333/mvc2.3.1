@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:if="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
@@ -21,68 +20,30 @@
       <th style="text-align:center;">surname</th>
       <th style="text-align:center;">age</th>
       <th style="text-align:center;">delete</th>
+      <th style="text-align:center;">update</th>
+
 
     </tr>
     </thead>
     <tr th:each="user : ${allUsersTable}">
-      <td th:text="${user.getId()}">brand</td>
-      <td th:text="${user.getName()}">brand</td>
-      <td th:text="${user.getSurname()}">color</td>
-      <td th:text="${user.getAge()}">color</td>
+      <td th:text="${user.getId()}">id</td>
+      <td th:text="${user.getName()}">name</td>
+      <td th:text="${user.getSurname()}">surname</td>
+      <td th:text="${user.getAge()}">age</td>
       <td>
-        <a th:href="@{/delete?userId={id}(id=${user.getId()})}">
+        <a th:href="@{/delete/{id}(id=${user.getId()})}">
+          <input type="submit" value="delete"></a>
+      </td>
+      <td>
+        <a th:href="@{/update/{id}(id=${user.getId()})}">
           <input type="submit" value="delete"></a>
       </td>
     </tr>
 
 
   </table>
-  <form action="#" method="POST" name="user" th:action="@{/add}">
 
-    <table>
-      <thead>
-      <tr>
-        <th>id</th>
-        <th>name</th>
-        <th>surname</th>
-        <th>age</th>
-        <th>delete</th>
-      </tr>
-      </thead>
-      <tr>
-        <th>
-          <label>
-            <input name="id" style="width: 100%;" type="text"/>
-          </label>
-        </th>
-        <th>
-          <label>
-            <input name="name" style="width: 100%;" type="text"/>
-          </label>
-        </th>
-        <th>
-          <label>
-            <input name="surname" style="width: 100%;" type="text"/>
-          </label>
-        </th>
-        <th>
-          <label>
-            <input name="age" style="width: 100%;" type="text"/>
-          </label>
-        </th>
-        <th style="text-align: center">
-          <a>
-            <input type="submit" value="submit"/>
-          </a>
-        </th>
-      </tr>
-    </table>
-
-  </form>
-  <ul th:if="${errors}" th:each="err : ${errors}">
-    <li th:text="${err}"/>
-
-  </ul>
+  <a th:href="@{/new}">New user</a>
 
 </div>
 

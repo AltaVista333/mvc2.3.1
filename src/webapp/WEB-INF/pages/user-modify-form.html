@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+        rel="stylesheet">
+  <title>New user</title>
+</head>
+<body>
+
+<div>
+  <form th:action="@{/new/add}" th:method="POST" th:object="${user}">
+    <label for="name">Enter name: </label>
+    <input id="name" th:field="*{name}" type="text">
+    <div style="color: red" th:errors="*{name}"
+         th:if="${#fields.hasErrors('name')}"></div>
+
+    <br>
+
+    <label for="surname">Enter surname: </label>
+    <input id="surname" th:field="*{surname}" type="text">
+    <div style="color: red" th:errors="*{surname}"
+         th:if="${#fields.hasErrors('surname')}"></div>
+
+    <br>
+
+    <label for="age">Enter age: </label>
+    <input id="age" th:field="*{age}" type="text">
+    <div style="color: red"
+         th:if="${#fields.hasErrors('age')}">Wrong age format
+    </div>
+
+    <br>
+    <input id="id" th:field="*{id}" type="hidden">
+    <input type="submit" value="Create or Update user">
+  </form>
+</div>
+
+</body>
+</html>

@@ -14,5 +14,5 @@ public interface UserDao {
 
     Optional<User> getUserById(Long id);
 
-    void updateUserById(User user);
+    void updateUser(User user);
 }

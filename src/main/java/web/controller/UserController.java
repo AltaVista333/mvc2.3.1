@@ -1,18 +1,15 @@
-/* (C)2022 */
 package web.controller;
 
-import java.util.List;
 import java.util.Optional;
-import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import web.model.User;
 import web.services.UserService;
 
@@ -27,30 +24,39 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public String getUsersTable(Model model,
-        RedirectAttributes redirectAttributes) {
+    public String getUsersTable(Model model) {
         model.addAttribute("allUsersTable", service.getAllUsers());
-       // model.addAttribute("errs",  model.getAttribute("errors"));
-
         return "users-view";
     }
 
-    @PostMapping("/add")
-    public String addUser(@ModelAttribute @Validated User user,
-        BindingResult result, RedirectAttributes attributes) {
+    @GetMapping("/new")
+    public String getUserCreateForm(@ModelAttribute User user) {
+        return "user-modify-form";
+    }
 
+    @GetMapping("/update/{id}")
+    public String getUserUpdateForm(@PathVariable Long id, Model model) {
+        return service.getUserById(id).map(model::addAttribute).isPresent()
+            ? "user-modify-form" : "redirect:/";
+    }
+
+    @PostMapping("/new/add")
+    public String addUser(@Valid @ModelAttribute("user") User user,
+        BindingResult result) {
         if (result.hasErrors()) {
-
-            List<String> errors = result.getAllErrors().stream()
-                .map(x -> x.unwrap(ConstraintViolation.class))
-                .map(ConstraintViolation::getMessage).toList();
-            attributes.addFlashAttribute("errors", errors);
-
-        } else {
-            Optional.ofNullable(user.getId())
-                .ifPresentOrElse(x -> service.updateUserById(user),
-                    () -> service.addUser(user));
+            return "user-modify-form";
         }
+
+        Optional.ofNullable(user.getId())
+            .ifPresentOrElse(x -> service.updateUserById(user),
+                () -> service.addUser(user));
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        service.deleteUserById(id);
         return "redirect:/";
     }
 }

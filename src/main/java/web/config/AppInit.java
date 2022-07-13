@@ -15,7 +15,7 @@ public class AppInit extends
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class<?>[]{
-            WebConfig.class, PersistenceConfig.class
+            WebConfig.class
         };
     }
 

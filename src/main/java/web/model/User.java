@@ -1,18 +1,14 @@
-/* (C)2022 */
 package web.model;
 
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 import org.hibernate.validator.constraints.Range;
 
 @Builder
@@ -43,20 +38,17 @@ public class User {
     @ToString.Include
     @Column(name = "name")
     @Size(min = 2, message = "name must be min 2 symbols")
-    @NotNull(message = "name must be min 2 symbols")
     private String name;
 
     @ToString.Include
     @Column(name = "last_name")
     @Size(min = 2, message = "surname must be min 2 symbols")
-    @NotNull(message = "name must be min 2 symbols")
     private String surname;
 
-    @ToString.Include
     @Column(name = "age")
     @Min(value = 14)
     @Max(value = 99)
-    @NotNull(message = "Must be digit")
+    @NotNull(message = "Can't be null")
     private Integer age;
 
     @Override
@@ -64,17 +56,31 @@ public class User {
         if (this == o) {
             return true;
         }
-        if (o == null ||
-            Hibernate.getClass(this) !=
-                Hibernate.getClass(o)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         User user = (User) o;
-        return id != null && Objects.equals(id, user.id);
+
+        if (id != null ? !id.equals(user.id) : user.id != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(user.name) : user.name != null) {
+            return false;
+        }
+        if (surname != null ? !surname.equals(user.surname)
+            : user.surname != null) {
+            return false;
+        }
+        return age != null ? age.equals(user.age) : user.age == null;
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        result = 31 * result + (age != null ? age.hashCode() : 0);
+        return result;
     }
 }
