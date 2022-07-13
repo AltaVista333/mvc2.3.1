@@ -1,10 +1,8 @@
 package web.dao;
 
-import web.model.User;
-import web.model.UserDto;
-
 import java.util.List;
 import java.util.Optional;
+import web.model.User;
 
 public interface UserDao {
 
@@ -16,5 +14,5 @@ public interface UserDao {
 
     Optional<User> getUserById(Long id);
 
-    void updateUserById(UserDto dto);
+    void updateUser(User user);
 }

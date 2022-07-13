@@ -1,62 +1,62 @@
 package web.controller;
 
-import org.modelmapper.ModelMapper;
+import java.util.Optional;
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import web.model.UserDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import web.model.User;
 import web.services.UserService;
-
-import javax.validation.Valid;
 
 @Controller
 public class UserController {
 
     private final UserService service;
-    private final ModelMapper modelMapper;
 
-    public UserController(UserService service, ModelMapper modelMapper) {
+    @Autowired
+    public UserController(UserService service) {
         this.service = service;
-        this.modelMapper = modelMapper;
     }
 
-    @ModelAttribute("userDto")
-    public UserDto newMyForm() {
-        return new UserDto();
+    @GetMapping("/")
+    public String getUsersTable(Model model) {
+        model.addAttribute("allUsersTable", service.getAllUsers());
+        return "users-view";
     }
 
-    @RequestMapping(value = "/")
-    public String allUsers( ModelMap model) {
-        model.addAttribute("users", service.getAllUsers());
-        return "users";
+    @GetMapping("/new")
+    public String getUserCreateForm(@ModelAttribute User user) {
+        return "user-modify-form";
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public String addOrUpdateUser(@Valid @ModelAttribute(value = "userDto") UserDto userDto,
-                                  BindingResult bindingResult,
-                                  RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-           redirectAttributes
-                   .addFlashAttribute("org.springframework.validation.BindingResult.userDto"
-                           ,bindingResult);
-           redirectAttributes.addFlashAttribute("userDto", userDto);
-        } else {
-            if(userDto.getId() == null) {
-                User user = modelMapper.map(userDto, User.class);
-                service.addUser(user);
-            } else {
-                service.updateUserById(userDto);
-            }
+    @GetMapping("/update/{id}")
+    public String getUserUpdateForm(@PathVariable Long id, Model model) {
+        return service.getUserById(id).map(model::addAttribute).isPresent()
+            ? "user-modify-form" : "redirect:/";
+    }
+
+    @PostMapping("/new/add")
+    public String addUser(@Valid @ModelAttribute("user") User user,
+        BindingResult result) {
+        if (result.hasErrors()) {
+            return "user-modify-form";
         }
+
+        Optional.ofNullable(user.getId())
+            .ifPresentOrElse(x -> service.updateUserById(user),
+                () -> service.addUser(user));
+
         return "redirect:/";
     }
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String deleteUser(@RequestParam String userId, ModelMap modelMap) {
-        service.deleteUserById(Long.parseLong(userId));
-        modelMap.addAttribute("users", service.getAllUsers());
+
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        service.deleteUserById(id);
         return "redirect:/";
     }
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+        rel="stylesheet">
+  <title>Title</title>
+</head>
+<body>
+
+<div class="container">
+  <table
+      class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+      style="text-align:center; margin-top: 20px; overflow-x: auto;">
+    <thead>
+    <tr>
+      <th style="text-align:center;">id</th>
+      <th style="text-align:center;">name</th>
+      <th style="text-align:center;">surname</th>
+      <th style="text-align:center;">age</th>
+      <th style="text-align:center;">delete</th>
+      <th style="text-align:center;">update</th>
+
+
+    </tr>
+    </thead>
+    <tr th:each="user : ${allUsersTable}">
+      <td th:text="${user.getId()}">id</td>
+      <td th:text="${user.getName()}">name</td>
+      <td th:text="${user.getSurname()}">surname</td>
+      <td th:text="${user.getAge()}">age</td>
+      <td>
+        <a th:href="@{/delete/{id}(id=${user.getId()})}">
+          <input type="submit" value="delete"></a>
+      </td>
+      <td>
+        <a th:href="@{/update/{id}(id=${user.getId()})}">
+          <input type="submit" value="delete"></a>
+      </td>
+    </tr>
+
+
+  </table>
+
+  <a th:href="@{/new}">New user</a>
+
+</div>
+
+</body>
+</html>
