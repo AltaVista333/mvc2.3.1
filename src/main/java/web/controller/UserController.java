@@ -1,6 +1,5 @@
 package web.controller;
 
-import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,16 +40,12 @@ public class UserController {
     }
 
     @PostMapping("/new/add")
-    public String addUser(@Valid @ModelAttribute("user") User user,
+    public String addNewOrUpdateUser(@Valid @ModelAttribute("user") User user,
         BindingResult result) {
         if (result.hasErrors()) {
             return "user-modify-form";
         }
-
-        Optional.ofNullable(user.getId())
-            .ifPresentOrElse(x -> service.updateUserById(user),
-                () -> service.addUser(user));
-
+        service.updateOrsaveUser(user);
         return "redirect:/";
     }
 

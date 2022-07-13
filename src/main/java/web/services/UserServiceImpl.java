@@ -42,5 +42,11 @@ public class UserServiceImpl implements UserService {
         userDao.updateUser(user);
     }
 
+    public void updateOrsaveUser(User user) {
+        Optional.ofNullable(user.getId())
+            .ifPresentOrElse(x -> updateUserById(user),
+                () -> addUser(user));
+    }
+
 
 }
